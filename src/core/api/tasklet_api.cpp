@@ -41,7 +41,7 @@
 
 using namespace ot;
 
-void otTaskletsProcess(otInstance *aInstance)// @NOTE 
+void otTaskletsProcess(otInstance *aInstance)
 {
     VerifyOrExit(otInstanceIsInitialized(aInstance));
     AsCoreType(aInstance).Get<Tasklet::Scheduler>().ProcessQueuedTasklets();

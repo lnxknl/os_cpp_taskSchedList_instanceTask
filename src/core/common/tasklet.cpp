@@ -64,7 +64,7 @@ void Tasklet::Scheduler::PostTasklet(Tasklet &aTasklet)
     }
 }
 
-void Tasklet::Scheduler::ProcessQueuedTasklets(void)// @NOTE 
+void Tasklet::Scheduler::ProcessQueuedTasklets(void)
 {
     Tasklet *tail = mTail;
 
@@ -78,7 +78,7 @@ void Tasklet::Scheduler::ProcessQueuedTasklets(void)// @NOTE
 
     while (tail != nullptr)
     {
-        Tasklet *tasklet = tail->mNext;// @NOTE 
+        Tasklet *tasklet = tail->mNext;
 
         if (tasklet == tail)
         {
@@ -86,7 +86,7 @@ void Tasklet::Scheduler::ProcessQueuedTasklets(void)// @NOTE
         }
         else
         {
-            tail->mNext = tasklet->mNext;// @NOTE 
+            tail->mNext = tasklet->mNext;
         }
 
         tasklet->mNext = nullptr;

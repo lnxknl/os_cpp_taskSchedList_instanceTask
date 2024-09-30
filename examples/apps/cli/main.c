@@ -100,7 +100,7 @@ static const otCliCommand kCommands[] = {
 
 int main(int argc, char *argv[])
 {
-    otInstance *instance;// @NOTE 
+    otInstance *instance;
 
 #ifdef __linux__
     // Ensure we terminate this process if the
@@ -128,13 +128,13 @@ pseudo_reset:
     assert(otInstanceBuffer);
 
     // Initialize OpenThread with the buffer
-    instance = otInstanceInit(otInstanceBuffer, &otInstanceBufferLength);// @NOTE 
+    instance = otInstanceInit(otInstanceBuffer, &otInstanceBufferLength);
 #else
     instance = otInstanceInitSingle();
 #endif
     assert(instance);
 
-    otAppCliInit(instance);// @NOTE 
+    otAppCliInit(instance);
 
 #if OPENTHREAD_POSIX && !defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
     IgnoreError(otCliSetUserCommands(kCommands, OT_ARRAY_LENGTH(kCommands), instance));
@@ -142,7 +142,7 @@ pseudo_reset:
 
     while (!otSysPseudoResetWasRequested())
     {
-        otTaskletsProcess(instance);// @NOTE 
+        otTaskletsProcess(instance);
         otSysProcessDrivers(instance);
     }
 
