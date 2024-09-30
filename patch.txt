@@ -1,0 +1,82 @@
+diff --git a/examples/apps/cli/main.c b/examples/apps/cli/main.c
+index 62f7e3f..8aa7df3 100644
+--- a/examples/apps/cli/main.c
++++ b/examples/apps/cli/main.c
+@@ -100,7 +100,7 @@ static const otCliCommand kCommands[] = {
+ 
+ int main(int argc, char *argv[])
+ {
+-    otInstance *instance;
++    otInstance *instance;// @NOTE 
+ 
+ #ifdef __linux__
+     // Ensure we terminate this process if the
+@@ -128,13 +128,13 @@ pseudo_reset:
+     assert(otInstanceBuffer);
+ 
+     // Initialize OpenThread with the buffer
+-    instance = otInstanceInit(otInstanceBuffer, &otInstanceBufferLength);
++    instance = otInstanceInit(otInstanceBuffer, &otInstanceBufferLength);// @NOTE 
+ #else
+     instance = otInstanceInitSingle();
+ #endif
+     assert(instance);
+ 
+-    otAppCliInit(instance);
++    otAppCliInit(instance);// @NOTE 
+ 
+ #if OPENTHREAD_POSIX && !defined(FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION)
+     IgnoreError(otCliSetUserCommands(kCommands, OT_ARRAY_LENGTH(kCommands), instance));
+@@ -142,7 +142,7 @@ pseudo_reset:
+ 
+     while (!otSysPseudoResetWasRequested())
+     {
+-        otTaskletsProcess(instance);
++        otTaskletsProcess(instance);// @NOTE 
+         otSysProcessDrivers(instance);
+     }
+ 
+diff --git a/src/core/api/tasklet_api.cpp b/src/core/api/tasklet_api.cpp
+index bcda24a..c11c10a 100644
+--- a/src/core/api/tasklet_api.cpp
++++ b/src/core/api/tasklet_api.cpp
+@@ -41,7 +41,7 @@
+ 
+ using namespace ot;
+ 
+-void otTaskletsProcess(otInstance *aInstance)
++void otTaskletsProcess(otInstance *aInstance)// @NOTE 
+ {
+     VerifyOrExit(otInstanceIsInitialized(aInstance));
+     AsCoreType(aInstance).Get<Tasklet::Scheduler>().ProcessQueuedTasklets();
+diff --git a/src/core/common/tasklet.cpp b/src/core/common/tasklet.cpp
+index b2c4512..4520d27 100644
+--- a/src/core/common/tasklet.cpp
++++ b/src/core/common/tasklet.cpp
+@@ -64,7 +64,7 @@ void Tasklet::Scheduler::PostTasklet(Tasklet &aTasklet)
+     }
+ }
+ 
+-void Tasklet::Scheduler::ProcessQueuedTasklets(void)
++void Tasklet::Scheduler::ProcessQueuedTasklets(void)// @NOTE 
+ {
+     Tasklet *tail = mTail;
+ 
+@@ -78,7 +78,7 @@ void Tasklet::Scheduler::ProcessQueuedTasklets(void)
+ 
+     while (tail != nullptr)
+     {
+-        Tasklet *tasklet = tail->mNext;
++        Tasklet *tasklet = tail->mNext;// @NOTE 
+ 
+         if (tasklet == tail)
+         {
+@@ -86,7 +86,7 @@ void Tasklet::Scheduler::ProcessQueuedTasklets(void)
+         }
+         else
+         {
+-            tail->mNext = tasklet->mNext;
++            tail->mNext = tasklet->mNext;// @NOTE 
+         }
+ 
+         tasklet->mNext = nullptr;
